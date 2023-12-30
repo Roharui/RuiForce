@@ -10,20 +10,21 @@ enable_testing()
 
 add_executable(
   ${MY_TEST_NAME}
-  ${MY_TEST_SRCS} 
+  ${MY_TEST_SRCS}
   ${MY_SRCS_MINUS_MAIN}
 )
 
 target_include_directories(
-  ${MY_TEST_NAME} 
+  ${MY_TEST_NAME}
   PUBLIC
   ${MY_INCLUDES}
   ${MY_TEST_INCLUDES}
   ${MY_MSYS2_INCLUDES}
-  )
+)
 
 target_link_libraries(
   ${MY_TEST_NAME}
-  GTest::gtest_main
+  gtest
+  gtest_main
   ${MY_LIBS}
 )

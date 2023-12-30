@@ -1,7 +1,20 @@
+
 #include <iostream>
 
-int main(int, char **)
+#include "driver.hpp"
+
+int main(void)
 {
-  std::cout << "Hello World!" << std::endl;
+
+  try
+  {
+    Driver driver;
+    driver.run();
+  }
+  catch (const std::exception &e)
+  {
+    std::cerr << e.what() << std::endl;
+  }
+
   return 0;
 }
