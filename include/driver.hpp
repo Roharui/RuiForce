@@ -1,13 +1,18 @@
 #pragma once
 
+#include <raylib.h>
+
 class Driver
 {
 
 public:
     Driver();
-    void run();
+    void Run();
 
 private:
-    void initialize();
-    void drow();
+    void Initialize();
+    void Update();
+    void Drow();
+
+    Camera camera;
 };

@@ -9,7 +9,7 @@ int main(void)
   try
   {
     Driver driver;
-    driver.run();
+    driver.Run();
   }
   catch (const std::exception &e)
   {
