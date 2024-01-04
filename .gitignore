@@ -74,4 +74,7 @@ _deps
 
 build/
 
+include/HTTPRequest.hpp
+include/nlohmann
+
 # End of https://www.toptal.com/developers/gitignore/api/cmake,visualstudiocode,c++

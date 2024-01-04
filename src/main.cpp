@@ -2,10 +2,10 @@
 #include <iostream>
 
 #include "driver.hpp"
+#include "genann.h"
 
 int main(void)
 {
-
   try
   {
     Driver driver;
