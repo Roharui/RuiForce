@@ -1,8 +1,7 @@
 
 #include <iostream>
 
-#include "driver.hpp"
-#include "genann.h"
+#include "core/driver.hpp"
 
 int main(void)
 {

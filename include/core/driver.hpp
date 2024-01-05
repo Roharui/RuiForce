@@ -13,6 +13,4 @@ private:
     void Initialize();
     void Update();
     void Drow();
-
-    Camera camera;
 };
