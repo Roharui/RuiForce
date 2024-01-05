@@ -4,33 +4,51 @@
 #include "core/vault.hpp"
 #include "manager/camera_manager.hpp"
 
-void UpdateCameraZ()
+void CameraManager::UpdateCameraZ()
 {
     float scroll = GetMouseWheelMove();
     Vault::instance().camera.position.z += scroll;
 }
 
-void UpdateCameraXY()
+void CameraManager::UpdateCameraXY()
 {
+    if (this->doseWait())
+        return;
+
+    bool activated = false;
+
     Camera &camera = Vault::instance().camera;
     if (IsKeyDown(KEY_DOWN))
     {
         camera.position.y -= 0.1;
         camera.target.y -= 0.1;
+        activated = true;
     }
     if (IsKeyDown(KEY_UP))
     {
         camera.position.y += 0.1;
         camera.target.y += 0.1;
+        activated = true;
     }
     if (IsKeyDown(KEY_RIGHT))
     {
         camera.position.x += 0.1;
         camera.target.x += 0.1;
+        activated = true;
     }
     if (IsKeyDown(KEY_LEFT))
     {
         camera.position.x -= 0.1;
         camera.target.x -= 0.1;
+        activated = true;
     }
+
+    if (activated)
+        this->wait(60);
+}
+
+void CameraManager::run()
+{
+    this->UpdateCameraZ();
+    this->UpdateCameraXY();
 }

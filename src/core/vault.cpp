@@ -3,6 +3,8 @@
 
 #include "core/vault.hpp"
 
+Vault *Vault::v = nullptr;
+
 Vault::Vault()
 {
     this->camera =

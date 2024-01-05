@@ -1,12 +1,14 @@
 
 #include <raylib.h>
 
+#include <iostream>
+#include <string>
+
 #include "config.hpp"
 
 #include "core/driver.hpp"
 #include "core/vault.hpp"
-
-#include "manager/camera_manager.hpp"
+#include "core/engine.hpp"
 
 Driver::Driver()
 {
@@ -35,8 +37,8 @@ void Driver::Initialize()
 
 void Driver::Update()
 {
-    UpdateCameraXY();
-    UpdateCameraZ();
+    Engine::instance().run();
+    Engine::tictok();
 }
 
 void Driver::Drow()
@@ -51,6 +53,8 @@ void Driver::Drow()
     DrawCubeWires(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, MAROON);
 
     EndMode3D();
+
+    DrawText(std::to_string(Engine::instance().waitTick).c_str(), 0, 0, 10, BLACK);
 
     EndDrawing();
 }

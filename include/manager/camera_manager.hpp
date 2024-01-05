@@ -2,5 +2,14 @@
 
 #include <raylib.h>
 
-void UpdateCameraXY();
-void UpdateCameraZ();
+#include "manager/base_manager.hpp"
+
+class CameraManager : public BaseManager
+{
+private:
+    void UpdateCameraXY();
+    void UpdateCameraZ();
+
+public:
+    void run() override;
+};
