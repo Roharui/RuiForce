@@ -10,4 +10,5 @@
 #define MAP_WIDTH 10
 #define MAP_HEIGHT 8
 
-#define BLOCK_INTERVAL 0.2f
+#define BLOCK_SIZE 5.0f
+#define BLOCK_INTERVAL 0.5f

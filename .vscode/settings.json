@@ -74,7 +74,14 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "variant": "cpp",
-    "regex": "cpp"
+    "regex": "cpp",
+    "charconv": "cpp",
+    "format": "cpp",
+    "ranges": "cpp",
+    "shared_mutex": "cpp",
+    "span": "cpp",
+    "stdfloat": "cpp",
+    "valarray": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

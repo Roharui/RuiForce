@@ -1,16 +1,25 @@
 #pragma once
 
+#include <vector>
+
 #include <raylib.h>
 
+#include "utils/location.hpp"
+
 #include "object/base_object.hpp"
+#include "object/humun_object.hpp"
 
 class BlockObject : public BaseObject
 {
 private:
-    Vector3 position = {0.0f, 0.0f, 0.0f};
+    Loc loc;
+    std::vector<HumunObject *> humuns{};
 
 public:
     BlockObject();
-    BlockObject(int locX, int locY);
-    void drow() override;
+    BlockObject(Loc loc);
+
+    void addHumun(HumunObject *humun);
+
+    void draw() override;
 };

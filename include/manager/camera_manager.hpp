@@ -7,8 +7,9 @@
 class CameraManager : public BaseManager
 {
 private:
-    void UpdateCameraXY();
     void UpdateCameraZ();
+    void UpdateCameraKey();
+    void UpdateCameraMouse();
 
 public:
     void run() override;

@@ -20,7 +20,7 @@ void Driver::Run()
     while (!WindowShouldClose())
     {
         this->Update();
-        this->Drow();
+        this->draw();
     }
 
     CloseWindow();
@@ -34,6 +34,7 @@ void Driver::Initialize()
 
     SetTargetFPS(FPS);
 
+    Vault::initialize();
     Engine::initialize();
 }
 
@@ -43,7 +44,7 @@ void Driver::Update()
     Engine::tictok();
 }
 
-void Driver::Drow()
+void Driver::draw()
 {
     BeginDrawing();
 
@@ -51,14 +52,9 @@ void Driver::Drow()
 
     BeginMode3D(Vault::getCamera());
 
-    Vault::getMap().drow();
-
-    // DrawCube(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, RED);
-    // DrawCubeWires(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, MAROON);
+    Vault::getMap().draw();
 
     EndMode3D();
-
-    DrawText(std::to_string(Engine::getWait()).c_str(), 0, 0, 10, BLACK);
 
     EndDrawing();
 }

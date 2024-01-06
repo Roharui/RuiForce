@@ -12,5 +12,5 @@ public:
 private:
     void Initialize();
     void Update();
-    void Drow();
+    void draw();
 };

@@ -41,6 +41,7 @@ public:
     }
 
     // animation ==
+
     static bool wait()
     {
         return Engine::waitTick > 0;
