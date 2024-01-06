@@ -51,8 +51,10 @@ void Driver::Drow()
 
     BeginMode3D(Vault::getCamera());
 
-    DrawCube(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, RED);
-    DrawCubeWires(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, MAROON);
+    Vault::getMap().drow();
+
+    // DrawCube(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, RED);
+    // DrawCubeWires(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, MAROON);
 
     EndMode3D();
 

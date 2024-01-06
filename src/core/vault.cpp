@@ -11,3 +11,5 @@ Camera Vault::camera =
         45.0f,                       // Camera field-of-view Y
         CAMERA_PERSPECTIVE           // Camera projection type
 };
+
+MapGObject Vault::map;
