@@ -33,11 +33,13 @@ void Driver::Initialize()
     DisableCursor();
 
     SetTargetFPS(FPS);
+
+    Engine::initialize();
 }
 
 void Driver::Update()
 {
-    Engine::instance().run();
+    Engine::run();
     Engine::tictok();
 }
 
@@ -47,14 +49,14 @@ void Driver::Drow()
 
     ClearBackground(RAYWHITE);
 
-    BeginMode3D(Vault::instance().camera);
+    BeginMode3D(Vault::getCamera());
 
     DrawCube(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, RED);
     DrawCubeWires(Vector3{0.0f, 0.0f, 0.0f}, 2.0f, 2.0f, 0.0f, MAROON);
 
     EndMode3D();
 
-    DrawText(std::to_string(Engine::instance().waitTick).c_str(), 0, 0, 10, BLACK);
+    DrawText(std::to_string(Engine::getWait()).c_str(), 0, 0, 10, BLACK);
 
     EndDrawing();
 }

@@ -9,17 +9,12 @@ private:
     Vault();
     Vault(const Vault &ref) = delete;
     Vault &operator=(const Vault &ref) = delete;
-    static Vault *v;
+
+    static Camera camera;
 
 public:
-    Camera camera;
-
-    static Vault &instance()
+    static Camera &getCamera()
     {
-        if (v == nullptr)
-        {
-            v = new Vault();
-        }
-        return *v;
+        return Vault::camera;
     }
 };

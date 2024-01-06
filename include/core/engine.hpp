@@ -3,55 +3,62 @@
 #include <vector>
 
 #include "manager/base_manager.hpp"
+#include "manager/camera_manager.hpp"
 
 class Engine
 {
 private:
-    Engine();
+    Engine() = delete;
     Engine(const Engine &ref) = delete;
     Engine &operator=(const Engine &ref) = delete;
-    std::vector<BaseManager *> managers;
 
-    static Engine *s;
+    static int waitTick;
+    static std::vector<BaseManager *> managers;
 
-public:
-    int waitTick;
-    static Engine &instance()
+    // manager initialize ===
+
+    template <class T>
+    static void pushManager()
     {
-        if (s == nullptr)
-        {
-            s = new Engine();
-        }
-        return *s;
+        BaseManager *manager = new T();
+        Engine::managers.push_back(manager);
     }
 
+public:
+    // run engine ===
+
+    static void initialize()
+    {
+        Engine::pushManager<CameraManager>();
+    }
+
+    static void run()
+    {
+        for (BaseManager *manager : Engine::managers)
+        {
+            manager->run();
+        }
+    }
+
+    // animation ==
     static bool wait()
     {
-        if (s == nullptr)
-        {
-            s = new Engine();
-        }
-        return s->waitTick > 0;
+        return Engine::waitTick > 0;
     }
 
     static void tictok()
     {
-        if (s == nullptr)
-        {
-            s = new Engine();
-        }
-        if (s->waitTick > 0)
-            s->waitTick--;
+        if (Engine::waitTick > 0)
+            Engine::waitTick--;
+    }
+
+    static int getWait()
+    {
+        return Engine::waitTick;
     }
 
     static void setWait(int time)
     {
-        if (s == nullptr)
-        {
-            s = new Engine();
-        }
-        s->waitTick = time;
+        Engine::waitTick = time;
     }
-
-    void run();
 };

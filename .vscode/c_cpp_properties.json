@@ -4,7 +4,7 @@
             "name": "Mingw",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/include",
+                "${workspaceFolder}/include/**",
                 "${env:MINGW64_ROOT}/include"
             ],
             "defines": [
