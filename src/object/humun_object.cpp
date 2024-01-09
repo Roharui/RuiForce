@@ -18,10 +18,8 @@ void HumunObject::draw() {}
 
 void HumunObject::draw(Loc loc)
 {
-    DrawCube(
-        Vector3{
-            (BLOCK_SIZE + BLOCK_INTERVAL) * loc.x,
-            (BLOCK_SIZE + BLOCK_INTERVAL) * loc.y,
-            0.0f},
-        1.0f, 1.0f, 0.f, BLUE);
+    DrawCube(Vector3{0.0f, HUMUN_SIZE / 2, 0.0f},
+             HUMUN_SIZE, HUMUN_SIZE, HUMUN_SIZE, BLUE);
+    DrawCubeWires(Vector3{0.0f, HUMUN_SIZE / 2, 0.0f},
+                  HUMUN_SIZE, HUMUN_SIZE, HUMUN_SIZE, BLACK);
 }

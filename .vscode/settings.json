@@ -81,7 +81,11 @@
     "shared_mutex": "cpp",
     "span": "cpp",
     "stdfloat": "cpp",
-    "valarray": "cpp"
+    "valarray": "cpp",
+    "*.inc": "cpp",
+    "csignal": "cpp",
+    "coroutine": "cpp",
+    "future": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

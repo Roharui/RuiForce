@@ -31,8 +31,5 @@ BlockObject &MapGObject::getBlocks(Loc loc)
 
 void MapGObject::draw()
 {
-    for (BlockObject &s : this->blocks)
-    {
-        s.draw();
-    }
+    DrawGrid(30, 1.0f);
 }
