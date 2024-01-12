@@ -15,5 +15,5 @@ public:
     MapGObject();
     ~MapGObject();
 
-    void draw() override;
+    void draw3D() override;
 };

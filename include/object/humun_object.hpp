@@ -2,6 +2,8 @@
 
 #include <raylib.h>
 
+#include "config.hpp"
+
 #include "utils/location.hpp"
 
 #include "object/base_object.hpp"
@@ -17,6 +19,9 @@ public:
                     HUMUN_SIZE};
     float angle;
     bool selected = false;
+
+    int goFrame = FPS;
+    int action = -1;
 
     HumunObject();
     HumunObject(Vector3 loc, float angle, Color color);

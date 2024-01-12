@@ -1,5 +1,7 @@
 
 #include <random>
+#include <string>
+#include <format>
 
 #include <raylib.h>
 #include <raymath.h>
@@ -14,7 +16,7 @@
 #include "object/humun_object.hpp"
 
 HumunObject::HumunObject()
-    : HumunObject({0., HUMUN_MIN_Y, 0.}, 0., BLUE)
+    : HumunObject({0., HUMUN_SIZE_R, 0.}, 0., BLUE)
 {
 }
 
@@ -27,6 +29,8 @@ HumunObject::HumunObject(Vector3 loc, float angle, Color color)
 
 void HumunObject::draw2D()
 {
+    // std::string msg{std::format("x : {}, z : {}, angle : {}", this->loc.x, this->loc.z, this->angle)};
+    // DrawText(msg.c_str(), 0, 0, 10, BLACK);
 }
 
 void HumunObject::draw3D()

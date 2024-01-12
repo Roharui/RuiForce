@@ -3,5 +3,5 @@
 class BaseGObject
 {
 public:
-    virtual void draw() = 0;
+    virtual void draw3D() = 0;
 };

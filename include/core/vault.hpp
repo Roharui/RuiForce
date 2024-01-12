@@ -22,11 +22,8 @@ private:
 public:
     static void initialize()
     {
-        HumunObject *h1 = new HumunObject({0., HUMUN_MIN_Y, 0.}, 0., BLUE);
+        HumunObject *h1 = new HumunObject({0., HUMUN_SIZE_R, 0.}, 0., BLUE);
         Vault::getObject().push_back(h1);
-
-        HumunObject *h2 = new HumunObject({10., HUMUN_MIN_Y, 0.}, 0., BLUE);
-        Vault::getObject().push_back(h2);
     }
 
     static Camera &getCamera()
@@ -44,13 +41,25 @@ public:
         return Vault::object;
     }
 
-    static void draw()
+    static void draw2D()
     {
-        Vault::getMap().draw();
+        for (BaseObject *obj : Vault::getObject())
+        {
+            obj->draw2D();
+        }
+    }
+
+    static void draw3D()
+    {
+        BeginMode3D(Vault::getCamera());
+
+        Vault::getMap().draw3D();
 
         for (BaseObject *obj : Vault::getObject())
         {
             obj->draw3D();
         }
+
+        EndMode3D();
     }
 };

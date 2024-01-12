@@ -1,4 +1,7 @@
 
+#include <raylib.h>
+#include <raymath.h>
+
 #include "config.hpp"
 
 #include "utils/location.hpp"
@@ -15,7 +18,7 @@ MapGObject::~MapGObject()
 {
 }
 
-void MapGObject::draw()
+void MapGObject::draw3D()
 {
-    DrawGrid(10, HUMUN_SIZE);
+    DrawCube(Vector3Zero(), MAP_SIZE, 0, MAP_SIZE, GRAY);
 }

@@ -50,11 +50,9 @@ void Driver::Draw()
 
     ClearBackground(RAYWHITE);
 
-    BeginMode3D(Vault::getCamera());
+    Vault::draw3D();
 
-    Vault::draw();
-
-    EndMode3D();
+    Vault::draw2D();
 
     EndDrawing();
 }
