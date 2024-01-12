@@ -73,8 +73,6 @@ _deps
 .ionide
 
 build/
-
-HTTPRequest.hpp
-json.hpp
+expired/
 
 # End of https://www.toptal.com/developers/gitignore/api/cmake,visualstudiocode,c++

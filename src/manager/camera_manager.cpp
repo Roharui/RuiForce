@@ -6,34 +6,20 @@
 
 #include "manager/camera_manager.hpp"
 
-void CameraManager::UpdateCameraZ()
+void CameraManager::UpdateCameraY()
 {
-    float scroll = GetMouseWheelMove();
-    Vault::getCamera().position.z += scroll;
-}
+    if (IsKeyDown(KEY_SPACE))
+    {
+        Camera &camera = Vault::getCamera();
+        camera.position.y += 0.3f;
+        camera.target.y += 0.3f;
+    }
 
-void CameraManager::UpdateCameraKey()
-{
-    Camera &camera = Vault::getCamera();
-    if (IsKeyDown(KEY_DOWN))
+    if (IsKeyDown(KEY_LEFT_SHIFT))
     {
-        camera.position.y -= 0.5;
-        camera.target.y -= 0.5;
-    }
-    if (IsKeyDown(KEY_UP))
-    {
-        camera.position.y += 0.5;
-        camera.target.y += 0.5;
-    }
-    if (IsKeyDown(KEY_RIGHT))
-    {
-        camera.position.x += 0.5;
-        camera.target.x += 0.5;
-    }
-    if (IsKeyDown(KEY_LEFT))
-    {
-        camera.position.x -= 0.5;
-        camera.target.x -= 0.5;
+        Camera &camera = Vault::getCamera();
+        camera.position.y -= 0.3f;
+        camera.target.y -= 0.3f;
     }
 }
 
@@ -52,9 +38,10 @@ void CameraManager::UpdateCameraMouse()
     }
 }
 
+#include "config.hpp"
+
 void CameraManager::run()
 {
-    this->UpdateCameraZ();
-    this->UpdateCameraKey();
-    this->UpdateCameraMouse();
+    this->UpdateCameraY();
+    UpdateCamera(&Vault::getCamera(), CAMERA_FIRST_PERSON);
 }

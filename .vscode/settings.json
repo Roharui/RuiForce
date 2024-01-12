@@ -85,7 +85,8 @@
     "*.inc": "cpp",
     "csignal": "cpp",
     "coroutine": "cpp",
-    "future": "cpp"
+    "future": "cpp",
+    "strstream": "cpp"
   },
   "C_Cpp.errorSquiggles": "disabled"
 }

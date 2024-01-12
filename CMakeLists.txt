@@ -12,10 +12,9 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 file(GLOB_RECURSE MY_SRCS ${PROJECT_SOURCE_DIR}/src/*.cpp)
 set(MY_SRCS ${MY_SRCS} ${PROJECT_SOURCE_DIR}/src/main.cpp)
 set(MY_INCLUDES ${PROJECT_SOURCE_DIR}/include)
+set(MY_LINKS ${PROJECT_SOURCE_DIR}/lib)
 
-add_subdirectory(lib)
-
-set(MY_LIBS raylib wsock32 Ws2_32 HttpRequest) # 해당 변수에 필요한 라이브러리를 적어주세요
+set(MY_LIBS raylib ws2_32 wsock32 rabbitmq)
 
 add_subdirectory(src)
 add_subdirectory(tests)

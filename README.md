@@ -10,6 +10,7 @@ TBD
 
 ```
 pacman -S mingw64/mingw-w64-x86_64-raylib
+pacman -S mingw-w64-x86_64-rabbitmq-c
 ```
 
 # FORK

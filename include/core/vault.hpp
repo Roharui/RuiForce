@@ -3,6 +3,8 @@
 #include <vector>
 #include <raylib.h>
 
+#include "config.hpp"
+
 #include "object/humun_object.hpp"
 #include "gobject/map_gobject.hpp"
 
@@ -15,26 +17,13 @@ private:
 
     static Camera camera;
     static MapGObject map;
-    static std::vector<HumunObject *> humuns;
+    static std::vector<BaseObject *> object;
 
 public:
     static void initialize()
     {
-        HumunObject *h1 = new HumunObject();
-        Vault::gethumuns().push_back(h1);
-        Vault::getMap().getBlocks({0, 0}).addHumun(h1);
-
-        HumunObject *h2 = new HumunObject();
-        Vault::gethumuns().push_back(h2);
-        Vault::getMap().getBlocks({3, 3}).addHumun(h2);
-
-        HumunObject *h3 = new HumunObject();
-        Vault::gethumuns().push_back(h3);
-        Vault::getMap().getBlocks({5, 3}).addHumun(h3);
-
-        HumunObject *h4 = new HumunObject();
-        Vault::gethumuns().push_back(h4);
-        Vault::getMap().getBlocks({7, 7}).addHumun(h4);
+        HumunObject *h1 = new HumunObject({0., HUMUN_MIN_Y, 0.});
+        Vault::getObject().push_back(h1);
     }
 
     static Camera &getCamera()
@@ -47,8 +36,8 @@ public:
         return Vault::map;
     }
 
-    static std::vector<HumunObject *> &gethumuns()
+    static std::vector<BaseObject *> &getObject()
     {
-        return Vault::humuns;
+        return Vault::object;
     }
 };

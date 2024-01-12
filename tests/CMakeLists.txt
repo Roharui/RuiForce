@@ -19,8 +19,9 @@ target_include_directories(
   PUBLIC
   ${MY_INCLUDES}
   ${MY_TEST_INCLUDES}
-  ${MY_MSYS2_INCLUDES}
 )
+
+target_link_directories(${MY_TEST_NAME} PUBLIC ${MY_LINKS})
 
 target_link_libraries(
   ${MY_TEST_NAME}

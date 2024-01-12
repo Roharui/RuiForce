@@ -54,6 +54,11 @@ void Driver::draw()
 
     Vault::getMap().draw();
 
+    for (BaseObject *obj : Vault::getObject())
+    {
+        obj->draw();
+    }
+
     EndMode3D();
 
     EndDrawing();

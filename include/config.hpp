@@ -1,7 +1,7 @@
 #pragma once
 
-#define SCREEN_WIDTH 300
-#define SCREEN_HEIGHT 200
+#define SCREEN_WIDTH 800
+#define SCREEN_HEIGHT 450
 
 #define GAME_TITLE "WORLD SIMULATOR"
 
@@ -16,3 +16,4 @@
 #define BLOCK_INTERVAL 0.5f
 
 #define HUMUN_SIZE 2.5f
+#define HUMUN_MIN_Y HUMUN_SIZE / 2

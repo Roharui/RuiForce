@@ -10,9 +10,10 @@ class HumunObject : public BaseObject
 {
 private:
     Color color;
+    Vector3 loc;
 
 public:
     HumunObject();
+    HumunObject(Vector3 loc);
     void draw() override;
-    void draw(Loc loc);
 };
