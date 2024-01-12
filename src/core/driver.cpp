@@ -20,7 +20,7 @@ void Driver::Run()
     while (!WindowShouldClose())
     {
         this->Update();
-        this->draw();
+        this->Draw();
     }
 
     CloseWindow();
@@ -44,7 +44,7 @@ void Driver::Update()
     Engine::tictok();
 }
 
-void Driver::draw()
+void Driver::Draw()
 {
     BeginDrawing();
 
@@ -52,12 +52,7 @@ void Driver::draw()
 
     BeginMode3D(Vault::getCamera());
 
-    Vault::getMap().draw();
-
-    for (BaseObject *obj : Vault::getObject())
-    {
-        obj->draw();
-    }
+    Vault::draw();
 
     EndMode3D();
 

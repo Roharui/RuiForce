@@ -38,8 +38,6 @@ void CameraManager::UpdateCameraMouse()
     }
 }
 
-#include "config.hpp"
-
 void CameraManager::run()
 {
     this->UpdateCameraY();
