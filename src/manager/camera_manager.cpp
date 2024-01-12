@@ -1,5 +1,6 @@
 
 #include <raylib.h>
+#include <rcamera.h>
 
 #include "core/vault.hpp"
 #include "core/engine.hpp"
@@ -25,21 +26,32 @@ void CameraManager::UpdateCameraY()
 
 void CameraManager::UpdateCameraMouse()
 {
-    Camera &camera = Vault::getCamera();
 
-    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
-    {
-        Vector2 delta = GetMouseDelta();
-        camera.position.x -= delta.x / (0.8f * camera.position.z);
-        camera.position.y += delta.y / (0.8f * camera.position.z);
+    Camera *camera = &Vault::getCamera();
+    Vector2 mousePositionDelta = GetMouseDelta();
 
-        camera.target.x -= delta.x / (0.8f * camera.position.z);
-        camera.target.y += delta.y / (0.8f * camera.position.z);
-    }
+    bool moveInWorldPlane = true;
+    bool rotateAroundTarget = false;
+    bool lockView = true;
+    bool rotateUp = false;
+
+    // Mouse support
+    CameraYaw(camera, -mousePositionDelta.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotateAroundTarget);
+    CameraPitch(camera, -mousePositionDelta.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lockView, rotateAroundTarget, rotateUp);
+
+    // Keyboard support
+    if (IsKeyDown(KEY_W))
+        CameraMoveForward(camera, CAMERA_MOVE_SPEED, moveInWorldPlane);
+    if (IsKeyDown(KEY_A))
+        CameraMoveRight(camera, -CAMERA_MOVE_SPEED, moveInWorldPlane);
+    if (IsKeyDown(KEY_S))
+        CameraMoveForward(camera, -CAMERA_MOVE_SPEED, moveInWorldPlane);
+    if (IsKeyDown(KEY_D))
+        CameraMoveRight(camera, CAMERA_MOVE_SPEED, moveInWorldPlane);
 }
 
 void CameraManager::run()
 {
     this->UpdateCameraY();
-    UpdateCamera(&Vault::getCamera(), CAMERA_FIRST_PERSON);
+    UpdateCameraMouse();
 }

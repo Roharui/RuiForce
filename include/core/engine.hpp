@@ -5,6 +5,7 @@
 #include "manager/base_manager.hpp"
 #include "manager/camera_manager.hpp"
 #include "manager/humun_manager.hpp"
+#include "manager/rutine_manager.hpp"
 
 class Engine
 {
@@ -32,6 +33,7 @@ public:
     {
         Engine::pushManager<CameraManager>();
         Engine::pushManager<HumunMananger>();
+        Engine::pushManager<RutineManager>();
     }
 
     static void run()
