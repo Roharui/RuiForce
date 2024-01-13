@@ -2,7 +2,7 @@
 
 #include <string>
 #include <thread>
-#include <vector>
+#include <deque>
 
 #include <rabbitmq-c/amqp.h>
 #include <rabbitmq-c/tcp_socket.h>
@@ -14,13 +14,11 @@ private:
     amqp_socket_t *socket = NULL;
 
 public:
-    std::vector<char *> dataVec;
+    std::deque<float> dataQueue;
 
     MQService();
 
     void sendMessage(const char *filename, int len);
-
-    bool isResponsed();
 
     ~MQService();
 };

@@ -5,7 +5,7 @@
 
 #define GAME_TITLE "WORLD SIMULATOR"
 
-#define CAMERA_INTERVAL 100.0f
+#define CAMERA_INTERVAL 30.0f
 
 #define FPS 60
 

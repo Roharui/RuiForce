@@ -1,5 +1,6 @@
 #pragma once
 
+#include <thread>
 #include <string>
 
 #include "object/humun_object.hpp"
@@ -17,14 +18,21 @@ private:
 
     std::string fileName;
 
+    std::thread *t;
+
+    float angle = 0.;
+    int frame = 0;
+
     bool inGoal = false;
 
-    MQService mqService;
+    MQService *mqService = nullptr;
 
     void randomInitialze();
     void Capture();
     void mqProduce();
     void waitForResponse();
+    void changeAngle();
+    void movePosition();
 
     /*
 

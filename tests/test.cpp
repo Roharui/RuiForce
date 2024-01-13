@@ -13,9 +13,17 @@ TEST(Basic, GTest_test)
 
 TEST(MQ, GTest_test)
 {
-    MQService mq;
+    MQService *mq = new MQService();
 
     std::string x = "\"testfile.jpg\"";
 
-    mq.sendMessage(x.c_str(), x.size());
+    mq->sendMessage(x.c_str(), x.size());
+
+    delete mq;
+
+    mq = new MQService();
+
+    mq->sendMessage(x.c_str(), x.size());
+
+    delete mq;
 }

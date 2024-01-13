@@ -1,5 +1,6 @@
 
-
+#include <ctype.h>
+#include <stdarg.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +8,9 @@
 
 #include <rabbitmq-c/amqp.h>
 #include <rabbitmq-c/tcp_socket.h>
+#include <rabbitmq-c/framing.h>
+
+#include <iostream>
 
 #include <nlohmann/json.hpp>
 
@@ -15,19 +19,7 @@
 #include "service/mq_service.hpp"
 
 using namespace std;
-
-// Copyright 2007 - 2021, Alan Antonuk and the rabbitmq-c contributors.
-// SPDX-License-Identifier: mit
-
-#include <ctype.h>
-#include <stdarg.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
-#include <rabbitmq-c/amqp.h>
-#include <rabbitmq-c/framing.h>
-#include <stdint.h>
+using json = nlohmann::json;
 
 void die(const char *fmt, ...)
 {
@@ -94,6 +86,33 @@ void die_on_amqp_error(amqp_rpc_reply_t x, char const *context)
     exit(1);
 }
 
+char *stringify_bytes(amqp_bytes_t bytes)
+{
+    /* We will need up to 4 chars per byte, plus the terminating 0 */
+    char *res = (char *)malloc(bytes.len * 4 + 1);
+    uint8_t *data = (uint8_t *)bytes.bytes;
+    char *p = res;
+    size_t i;
+
+    for (i = 0; i < bytes.len; i++)
+    {
+        if (data[i] >= 32 && data[i] != 127)
+        {
+            *p++ = data[i];
+        }
+        else
+        {
+            *p++ = '\\';
+            *p++ = '0' + (data[i] >> 6);
+            *p++ = '0' + (data[i] >> 3 & 0x7);
+            *p++ = '0' + (data[i] & 0x7);
+        }
+    }
+
+    *p = 0;
+    return res;
+}
+
 MQService::MQService()
 {
     char const *hostname = MQ_HOST;
@@ -148,17 +167,14 @@ void MQService::sendMessage(const char *filename, int len)
 
         amqp_message_t message = envelope.message;
 
-        this->dataVec.push_back((char *)message.body.bytes);
+        json j = json::parse(stringify_bytes(message.body));
+
+        this->dataQueue.push_back((float)j["angle"]);
 
         amqp_basic_ack(conn, 1, (unsigned)envelope.delivery_tag, 0);
 
         amqp_destroy_envelope(&envelope);
     }
-}
-
-bool MQService::isResponsed()
-{
-    return this->dataVec.size() > 0;
 }
 
 MQService::~MQService()

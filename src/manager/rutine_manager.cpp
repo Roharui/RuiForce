@@ -1,4 +1,5 @@
 
+#include <iostream>
 #include <ctime>
 #include <format>
 #include <thread>
@@ -11,13 +12,13 @@
 #include "core/vault.hpp"
 
 #include "utils/random.hpp"
-#include "utils/strdup.hpp"
 
 #include "object/humun_object.hpp"
 
 #include "manager/rutine_manager.hpp"
 
 #include "service/mq_service.hpp"
+#include "service/move_service.hpp"
 
 using namespace std;
 
@@ -42,7 +43,7 @@ void RutineManager::randomInitialze()
 
 void RutineManager::Capture()
 {
-    HumunObject *humun = (HumunObject *)Vault::getObject().at(0);
+    HumunObject *humun = Vault::humun;
 
     BeginDrawing();
 
@@ -84,14 +85,45 @@ void RutineManager::Capture()
 
 void RutineManager::mqProduce()
 {
-    thread t(&this->mqService.sendMessage, this->mqService, this->fileName.c_str(), this->fileName.size());
+    thread t(&this->mqService->sendMessage, this->mqService, this->fileName.c_str(), this->fileName.size());
     t.detach();
 }
 
 void RutineManager::waitForResponse()
 {
-    if (this->mqService.isResponsed())
+    if (!this->mqService->dataQueue.empty())
     {
+        this->angle = this->mqService->dataQueue.at(0);
+        this->mqService->dataQueue.pop_front();
+        this->frame = 0;
+        this->step++;
+    }
+}
+
+void RutineManager::changeAngle()
+{
+    this->frame++;
+    HumunObject *humun = Vault::humun;
+
+    humun->angle += (this->angle / 30);
+
+    if (this->frame == 30)
+    {
+        this->frame = 0;
+        this->step++;
+    }
+}
+
+void RutineManager::movePosition()
+{
+    this->frame++;
+    HumunObject *humun = Vault::humun;
+
+    humun->loc = MoveToward(humun->loc, 1, humun->angle);
+
+    if (this->frame == FPS)
+    {
+        this->frame = 0;
         this->step++;
     }
 }
@@ -100,9 +132,11 @@ void RutineManager::run()
 {
     if (IsKeyPressed(KEY_P))
     {
+        delete this->mqService;
         this->step = 0;
         this->turn = DEFAULT_TURN;
         this->phase = DEFAULT_PHASE;
+        this->mqService = new MQService();
     }
 
     if (this->phase > 0)
@@ -126,6 +160,14 @@ void RutineManager::run()
 
         case 3:
             this->waitForResponse();
+            break;
+
+        case 4:
+            this->changeAngle();
+            break;
+
+        case 5:
+            this->movePosition();
             break;
 
         default:
