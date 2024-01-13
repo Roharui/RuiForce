@@ -11,8 +11,6 @@
 
 #include "core/vault.hpp"
 
-#include "utils/location.hpp"
-
 #include "object/humun_object.hpp"
 
 HumunObject::HumunObject()

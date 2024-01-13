@@ -141,7 +141,7 @@ MQService::MQService()
     die_on_amqp_error(amqp_get_rpc_reply(conn), "Declaring exchange");
 }
 
-void MQService::sendMessage(const char *filename, int len)
+void MQService::sendMessage(const char *filename)
 {
     amqp_bytes_t message_bytes;
 

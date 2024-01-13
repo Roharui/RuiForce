@@ -18,7 +18,7 @@ public:
 
     MQService();
 
-    void sendMessage(const char *filename, int len);
+    void sendMessage(const char *filename);
 
     ~MQService();
 };

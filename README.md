@@ -9,7 +9,8 @@ TBD
 # INSTALL
 
 ```
-pacman -S mingw64/mingw-w64-x86_64-raylib
-pacman -S mingw-w64-x86_64-rabbitmq-c
-pacman -S mingw-w64-x86_64-nlohmann-json
+pacman -S mingw-w64-x86_64-clang
+pacman -S mingw-w64-clang-x86_64-raylib
+pacman -S mingw-w64-clang-x86_64-rabbitmq-c
+pacman -S mingw-w64-clang-x86_64-nlohmann-json
 ```

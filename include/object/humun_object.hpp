@@ -4,8 +4,6 @@
 
 #include "config.hpp"
 
-#include "utils/location.hpp"
-
 #include "object/base_object.hpp"
 
 class HumunObject : public BaseObject

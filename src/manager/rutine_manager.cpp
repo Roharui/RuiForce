@@ -12,6 +12,8 @@
 #include "core/vault.hpp"
 
 #include "utils/random.hpp"
+#include "utils/file.hpp"
+#include "utils/collision.hpp"
 
 #include "object/humun_object.hpp"
 
@@ -25,7 +27,7 @@ using namespace std;
 float MAP_SIZE_MIN = -(MAP_SIZE / 2 - HUMUN_SIZE_R);
 float MAP_SIZE_MAX = (MAP_SIZE / 2 - HUMUN_SIZE_R);
 
-void RutineManager::randomInitialze()
+void RutineManager::initialze()
 {
     Vault::humun->loc = {
         getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
@@ -39,6 +41,11 @@ void RutineManager::randomInitialze()
         HUMUN_SIZE_R,
         getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
     };
+
+    this->moveBefore = 0.;
+    this->moveAfter = 0.;
+
+    this->inGoal = false;
 }
 
 void RutineManager::Capture()
@@ -72,20 +79,20 @@ void RutineManager::Capture()
 
     EndTextureMode();
 
-    this->fileName = std::format("{}.png", time(0));
+    this->fileName = std::format("{}\\{}.png", ExePath(), time(0));
 
     Image image = LoadImageFromTexture(target.texture);
     ImageFlipVertical(&image);
 
-    ExportImage(image, this->fileName.c_str());
+    // ExportImage(image, this->fileName.c_str());
 
     UnloadImage(image);
     UnloadRenderTexture(target);
 }
 
-void RutineManager::mqProduce()
+void RutineManager::mqProduceChoose()
 {
-    thread t(&this->mqService->sendMessage, this->mqService, this->fileName.data(), this->fileName.size());
+    thread t(&MQService::sendMessage, this->mqService, this->fileName.c_str());
     t.detach();
 }
 
@@ -116,16 +123,39 @@ void RutineManager::changeAngle()
 
 void RutineManager::movePosition()
 {
-    this->frame++;
     HumunObject *humun = Vault::humun;
+    GoalObject *goal = Vault::goal;
+
+    if (this->frame == 0)
+    {
+        this->moveBefore = Vector3DistanceSqr(humun->loc, goal->loc);
+    }
+
+    if (CheckCollisionBoxesV(humun->loc, humun->size, goal->loc, goal->size))
+    {
+        this->inGoal = true;
+        this->frame = 0;
+        this->step++;
+        return;
+    }
+
+    this->frame++;
 
     humun->loc = MoveToward(humun->loc, 1, humun->angle);
 
     if (this->frame == FPS)
     {
         this->frame = 0;
+        this->moveAfter = Vector3DistanceSqr(humun->loc, goal->loc);
+        this->moveAmount = to_string(this->moveBefore - this->moveAfter);
         this->step++;
     }
+}
+
+void RutineManager::mqProduceResult()
+{
+    thread t(&MQService::sendMessage, this->mqService, this->moveAmount.c_str());
+    t.detach();
 }
 
 void RutineManager::run()
@@ -144,7 +174,7 @@ void RutineManager::run()
         switch (this->step)
         {
         case 0:
-            this->randomInitialze();
+            this->initialze();
             this->step++;
             break;
 
@@ -154,7 +184,7 @@ void RutineManager::run()
             break;
 
         case 2:
-            this->mqProduce();
+            this->mqProduceChoose();
             this->step++;
             break;
 
@@ -171,9 +201,14 @@ void RutineManager::run()
             break;
 
         case 6:
+            this->mqProduceResult();
+            this->step++;
+            break;
+
+        case 7:
             this->turn--;
             this->step = 1;
-            if (this->turn == 0)
+            if (this->turn == 0 || this->inGoal)
             {
                 this->step = 0;
                 this->phase--;

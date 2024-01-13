@@ -23,16 +23,21 @@ private:
     float angle = 0.;
     int frame = 0;
 
+    float moveBefore = 0.;
+    float moveAfter = 0.;
+    std::string moveAmount = "";
+
     bool inGoal = false;
 
     MQService *mqService = nullptr;
 
-    void randomInitialze();
+    void initialze();
     void Capture();
-    void mqProduce();
+    void mqProduceChoose();
     void waitForResponse();
     void changeAngle();
     void movePosition();
+    void mqProduceResult();
 
     /*
 
