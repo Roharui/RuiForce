@@ -20,3 +20,12 @@
 
 #define DEFAULT_PHASE 5
 #define DEFAULT_TURN 15
+
+#define MQ_HOST "localhost"
+#define MQ_PORT 5672
+#define MQ_ID "guest"
+#define MQ_PW "guest"
+#define MQ_EXCHANGE "test"
+#define MQ_ROUTING_KEY "test"
+#define MQ_QUEUE "test"
+#define MQ_REPLY "reply"

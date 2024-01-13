@@ -1,8 +1,12 @@
 #pragma once
 
+#include <string>
+
 #include "object/humun_object.hpp"
 
 #include "manager/base_manager.hpp"
+
+#include "service/mq_service.hpp"
 
 class RutineManager : public BaseManager
 {
@@ -11,13 +15,16 @@ private:
     int turn = 0;
     int phase = 0;
 
-    bool init = false;
+    std::string fileName;
+
     bool inGoal = false;
 
-    HumunObject *humun;
+    MQService mqService;
 
-    // void MoveHumun();
+    void randomInitialze();
     void Capture();
+    void mqProduce();
+    void waitForResponse();
 
     /*
 

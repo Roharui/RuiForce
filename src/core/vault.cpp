@@ -19,3 +19,5 @@ Camera Vault::camera =
 MapGObject Vault::map;
 
 std::vector<BaseObject *> Vault::object = std::vector<BaseObject *>();
+HumunObject *Vault::humun = nullptr;
+GoalObject *Vault::goal = nullptr;

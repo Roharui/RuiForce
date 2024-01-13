@@ -1,7 +1,7 @@
 
 #include <ctime>
 #include <format>
-#include <random>
+#include <thread>
 
 #include <raylib.h>
 #include <raymath.h>
@@ -10,14 +10,40 @@
 
 #include "core/vault.hpp"
 
+#include "utils/random.hpp"
+#include "utils/strdup.hpp"
+
 #include "object/humun_object.hpp"
 
 #include "manager/rutine_manager.hpp"
 
+#include "service/mq_service.hpp"
+
 using namespace std;
+
+float MAP_SIZE_MIN = -(MAP_SIZE / 2 - HUMUN_SIZE_R);
+float MAP_SIZE_MAX = (MAP_SIZE / 2 - HUMUN_SIZE_R);
+
+void RutineManager::randomInitialze()
+{
+    Vault::humun->loc = {
+        getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
+        HUMUN_SIZE_R,
+        getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
+    };
+    Vault::humun->angle = getRandf(0, 6);
+
+    Vault::goal->loc = {
+        getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
+        HUMUN_SIZE_R,
+        getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
+    };
+}
 
 void RutineManager::Capture()
 {
+    HumunObject *humun = (HumunObject *)Vault::getObject().at(0);
+
     BeginDrawing();
 
     RenderTexture2D target = LoadRenderTexture(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -25,8 +51,8 @@ void RutineManager::Capture()
     BeginTextureMode(target);
     ClearBackground(RAYWHITE);
 
-    BeginMode3D({this->humun->loc,
-                 Vector3Add(this->humun->loc, Vector3RotateByAxisAngle({3.0, 0., 0.}, {0., 1., 0.}, this->humun->angle)),
+    BeginMode3D({humun->loc,
+                 Vector3Add(humun->loc, Vector3RotateByAxisAngle({3.0, 0., 0.}, {0., 1., 0.}, humun->angle)),
                  Vector3{0.0f, 1.0f, 0.0f},
                  45.0f,
                  CAMERA_PERSPECTIVE});
@@ -35,7 +61,7 @@ void RutineManager::Capture()
 
     for (BaseObject *basOobj : Vault::getObject())
     {
-        if (basOobj == this->humun)
+        if (basOobj == humun)
             continue;
 
         ((HumunObject *)basOobj)->draw3D();
@@ -45,12 +71,29 @@ void RutineManager::Capture()
 
     EndTextureMode();
 
+    this->fileName = std::format("{}.png", time(0));
+
     Image image = LoadImageFromTexture(target.texture);
     ImageFlipVertical(&image);
-    ExportImage(image, std::format("{}.png", time(0)).c_str());
-    UnloadImage(image);
 
+    ExportImage(image, this->fileName.c_str());
+
+    UnloadImage(image);
     UnloadRenderTexture(target);
+}
+
+void RutineManager::mqProduce()
+{
+    thread t(&this->mqService.sendMessage, this->mqService, this->fileName.c_str(), this->fileName.size());
+    t.detach();
+}
+
+void RutineManager::waitForResponse()
+{
+    if (this->mqService.isResponsed())
+    {
+        this->step++;
+    }
 }
 
 void RutineManager::run()
@@ -60,11 +103,33 @@ void RutineManager::run()
         this->step = 0;
         this->turn = DEFAULT_TURN;
         this->phase = DEFAULT_PHASE;
-        this->humun = (HumunObject *)Vault::getObject().at(0);
     }
 
     if (this->phase > 0)
     {
-        // this->MoveHumun();
+        switch (this->step)
+        {
+        case 0:
+            this->randomInitialze();
+            this->step++;
+            break;
+
+        case 1:
+            this->Capture();
+            this->step++;
+            break;
+
+        case 2:
+            this->mqProduce();
+            this->step++;
+            break;
+
+        case 3:
+            this->waitForResponse();
+            break;
+
+        default:
+            break;
+        }
     }
 }
