@@ -85,7 +85,7 @@ void RutineManager::Capture()
 
 void RutineManager::mqProduce()
 {
-    thread t(&this->mqService->sendMessage, this->mqService, this->fileName.c_str(), this->fileName.size());
+    thread t(&this->mqService->sendMessage, this->mqService, this->fileName.data(), this->fileName.size());
     t.detach();
 }
 
@@ -168,6 +168,16 @@ void RutineManager::run()
 
         case 5:
             this->movePosition();
+            break;
+
+        case 6:
+            this->turn--;
+            this->step = 1;
+            if (this->turn == 0)
+            {
+                this->step = 0;
+                this->phase--;
+            }
             break;
 
         default:

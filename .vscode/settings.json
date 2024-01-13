@@ -88,6 +88,5 @@
     "future": "cpp",
     "strstream": "cpp",
     "*.ipp": "cpp"
-  },
-  "C_Cpp.errorSquiggles": "disabled"
+  }
 }
