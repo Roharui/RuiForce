@@ -1,7 +1,8 @@
 #pragma once
 
-class BaseManager
+class BaseScenario
 {
 public:
+    virtual void initialize() = 0;
     virtual void run() = 0;
 };

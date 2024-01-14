@@ -1,14 +1,20 @@
 #pragma once
 
+#include <vector>
+
 #include <raylib.h>
 
 #include "config.hpp"
 
 #include "object/base_object.hpp"
 
+using namespace std;
+
 class HumunObject : public BaseObject
 {
 private:
+    void push() override;
+
 public:
     Color color;
     Vector3 loc;
@@ -17,9 +23,6 @@ public:
                     HUMUN_SIZE};
     float angle;
     bool selected = false;
-
-    int goFrame = FPS;
-    int action = -1;
 
     HumunObject();
     HumunObject(Vector3 loc, float angle, Color color);

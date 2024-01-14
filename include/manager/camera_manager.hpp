@@ -2,7 +2,7 @@
 
 #include "manager/base_manager.hpp"
 
-#define CAMERA_MOVE_SPEED 0.09f
+#define CAMERA_MOVE_SPEED 0.2f
 #define CAMERA_ROTATION_SPEED 0.03f
 #define CAMERA_PAN_SPEED 0.2f
 

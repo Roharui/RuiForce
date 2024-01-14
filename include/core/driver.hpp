@@ -10,7 +10,6 @@ public:
     void Run();
 
 private:
-    void Initialize();
     void Update();
     void Draw();
 };

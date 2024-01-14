@@ -17,26 +17,26 @@
 
 #include "object/humun_object.hpp"
 
-#include "manager/rutine_manager.hpp"
-
 #include "service/mq_service.hpp"
 #include "service/move_service.hpp"
+
+#include "scenario/goal_senario.hpp"
 
 using namespace std;
 
 float MAP_SIZE_MIN = -(MAP_SIZE / 2 - HUMUN_SIZE_R);
 float MAP_SIZE_MAX = (MAP_SIZE / 2 - HUMUN_SIZE_R);
 
-void RutineManager::initialze()
+void GoalScenario::startTurn()
 {
-    Vault::humun->loc = {
+    this->humun->loc = {
         getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
         HUMUN_SIZE_R,
         getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
     };
-    Vault::humun->angle = getRandf(0, 6);
+    this->humun->angle = getRandf(0, 6);
 
-    Vault::goal->loc = {
+    this->goal->loc = {
         getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
         HUMUN_SIZE_R,
         getRandf(MAP_SIZE_MIN, MAP_SIZE_MAX),
@@ -48,9 +48,9 @@ void RutineManager::initialze()
     this->inGoal = false;
 }
 
-void RutineManager::Capture()
+void GoalScenario::capture()
 {
-    HumunObject *humun = Vault::humun;
+    HumunObject *humun = this->humun;
 
     BeginDrawing();
 
@@ -65,9 +65,9 @@ void RutineManager::Capture()
                  45.0f,
                  CAMERA_PERSPECTIVE});
 
-    Vault::getMap().draw3D();
+    Vault::instance().map.draw3D();
 
-    for (BaseObject *basOobj : Vault::getObject())
+    for (BaseObject *basOobj : Vault::instance().object)
     {
         if (basOobj == humun)
             continue;
@@ -84,19 +84,19 @@ void RutineManager::Capture()
     Image image = LoadImageFromTexture(target.texture);
     ImageFlipVertical(&image);
 
-    // ExportImage(image, this->fileName.c_str());
+    ExportImage(image, this->fileName.c_str());
 
     UnloadImage(image);
     UnloadRenderTexture(target);
 }
 
-void RutineManager::mqProduceChoose()
+void GoalScenario::mqProduceChoose()
 {
     thread t(&MQService::sendMessage, this->mqService, this->fileName.c_str());
     t.detach();
 }
 
-void RutineManager::waitForResponse()
+void GoalScenario::waitForResponse()
 {
     if (!this->mqService->dataQueue.empty())
     {
@@ -107,10 +107,10 @@ void RutineManager::waitForResponse()
     }
 }
 
-void RutineManager::changeAngle()
+void GoalScenario::changeAngle()
 {
     this->frame++;
-    HumunObject *humun = Vault::humun;
+    HumunObject *humun = this->humun;
 
     humun->angle += (this->angle / 30);
 
@@ -121,10 +121,10 @@ void RutineManager::changeAngle()
     }
 }
 
-void RutineManager::movePosition()
+void GoalScenario::movePosition()
 {
-    HumunObject *humun = Vault::humun;
-    GoalObject *goal = Vault::goal;
+    HumunObject *humun = this->humun;
+    GoalObject *goal = this->goal;
 
     if (this->frame == 0)
     {
@@ -152,13 +152,19 @@ void RutineManager::movePosition()
     }
 }
 
-void RutineManager::mqProduceResult()
+void GoalScenario::mqProduceResult()
 {
     thread t(&MQService::sendMessage, this->mqService, this->moveAmount.c_str());
     t.detach();
 }
 
-void RutineManager::run()
+void GoalScenario::initialize()
+{
+    this->humun = new HumunObject({0., HUMUN_SIZE_R, 0.}, 0., BLUE);
+    this->goal = new GoalObject({5., HUMUN_SIZE_R, 0.});
+}
+
+void GoalScenario::run()
 {
     if (IsKeyPressed(KEY_P))
     {
@@ -174,12 +180,12 @@ void RutineManager::run()
         switch (this->step)
         {
         case 0:
-            this->initialze();
+            this->startTurn();
             this->step++;
             break;
 
         case 1:
-            this->Capture();
+            this->capture();
             this->step++;
             break;
 

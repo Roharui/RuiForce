@@ -10,65 +10,36 @@
 
 #include "gobject/map_gobject.hpp"
 
+using namespace std;
+
 class Vault
 {
 private:
-    Vault() = delete;
+    Vault();
     Vault(const Vault &ref) = delete;
     Vault &operator=(const Vault &ref) = delete;
 
+    static Vault *vault;
+
 public:
-    static Camera camera;
-    static MapGObject map;
-    static std::vector<BaseObject *> object;
-    static HumunObject *humun;
-    static GoalObject *goal;
+    Camera camera;
+    MapGObject map;
+    vector<BaseObject *> object;
+    vector<HumunObject *> humun;
+    vector<GoalObject *> goal;
 
-    static void initialize()
+    void initialize();
+
+    void draw2D();
+    void draw3D();
+
+    static Vault &instance()
     {
-        HumunObject *humun = new HumunObject({0., HUMUN_SIZE_R, 0.}, 0., BLUE);
-        Vault::object.push_back(humun);
-        Vault::humun = humun;
-
-        GoalObject *goal = new GoalObject({5., HUMUN_SIZE_R, 0.});
-        Vault::object.push_back(goal);
-        Vault::goal = goal;
-    }
-
-    static Camera &getCamera()
-    {
-        return Vault::camera;
-    }
-
-    static MapGObject &getMap()
-    {
-        return Vault::map;
-    }
-
-    static std::vector<BaseObject *> &getObject()
-    {
-        return Vault::object;
-    }
-
-    static void draw2D()
-    {
-        for (BaseObject *obj : Vault::getObject())
+        if (Vault::vault == nullptr)
         {
-            obj->draw2D();
-        }
-    }
-
-    static void draw3D()
-    {
-        BeginMode3D(Vault::getCamera());
-
-        Vault::getMap().draw3D();
-
-        for (BaseObject *obj : Vault::getObject())
-        {
-            obj->draw3D();
+            Vault::vault = new Vault();
         }
 
-        EndMode3D();
+        return *Vault::vault;
     }
 };

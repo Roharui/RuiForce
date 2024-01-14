@@ -2,68 +2,43 @@
 
 #include <vector>
 
+#include "scenario/goal_senario.hpp"
+
 #include "manager/base_manager.hpp"
 #include "manager/camera_manager.hpp"
 #include "manager/humun_manager.hpp"
-#include "manager/rutine_manager.hpp"
+
+#include "scenario/base_senario.hpp"
+
+using namespace std;
 
 class Engine
 {
 private:
-    Engine() = delete;
+    Engine();
     Engine(const Engine &ref) = delete;
     Engine &operator=(const Engine &ref) = delete;
 
-    static int waitTick;
-    static std::vector<BaseManager *> managers;
-
-    // manager initialize ===
+    vector<BaseManager *> managers;
+    BaseScenario *scenario;
 
     template <class T>
-    static void pushManager()
-    {
-        BaseManager *manager = new T();
-        Engine::managers.push_back(manager);
-    }
+    void pushManager();
+
+    static Engine *engine;
 
 public:
-    // run engine ===
+    void initialize(BaseScenario* scenario);
 
-    static void initialize()
-    {
-        Engine::pushManager<CameraManager>();
-        Engine::pushManager<HumunMananger>();
-        Engine::pushManager<RutineManager>();
-    }
+    void run();
 
-    static void run()
+    static Engine &instance()
     {
-        for (BaseManager *manager : Engine::managers)
+        if (Engine::engine == nullptr)
         {
-            manager->run();
+            Engine::engine = new Engine();
         }
-    }
 
-    // animation ==
-
-    static bool wait()
-    {
-        return Engine::waitTick > 0;
-    }
-
-    static void tictok()
-    {
-        if (Engine::waitTick > 0)
-            Engine::waitTick--;
-    }
-
-    static int getWait()
-    {
-        return Engine::waitTick;
-    }
-
-    static void setWait(int time)
-    {
-        Engine::waitTick = time;
+        return *Engine::engine;
     }
 };

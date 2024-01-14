@@ -10,9 +10,19 @@
 #include "core/vault.hpp"
 #include "core/engine.hpp"
 
+#include "scenario/goal_senario.hpp"
+
 Driver::Driver()
 {
-    Initialize();
+    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
+
+    DisableCursor();
+
+    SetTargetFPS(FPS);
+
+    Vault::instance();
+    Engine::instance();
+    Engine::instance().initialize(new GoalScenario());
 }
 
 void Driver::Run()
@@ -26,22 +36,9 @@ void Driver::Run()
     CloseWindow();
 }
 
-void Driver::Initialize()
-{
-    InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
-
-    DisableCursor();
-
-    SetTargetFPS(FPS);
-
-    Vault::initialize();
-    Engine::initialize();
-}
-
 void Driver::Update()
 {
-    Engine::run();
-    Engine::tictok();
+    Engine::instance().run();
 }
 
 void Driver::Draw()
@@ -50,9 +47,8 @@ void Driver::Draw()
 
     ClearBackground(RAYWHITE);
 
-    Vault::draw3D();
-
-    Vault::draw2D();
+    Vault::instance().draw3D();
+    Vault::instance().draw2D();
 
     EndDrawing();
 }

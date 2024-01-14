@@ -23,12 +23,18 @@ HumunObject::HumunObject(Vector3 loc, float angle, Color color)
     this->loc = loc;
     this->angle = angle;
     this->color = color;
+
+    this->push();
+}
+
+void HumunObject::push()
+{
+    Vault::instance().object.push_back(this);
+    Vault::instance().humun.push_back(this);
 }
 
 void HumunObject::draw2D()
 {
-    // std::string msg{std::format("x : {}, z : {}, angle : {}", this->loc.x, this->loc.z, this->angle)};
-    // DrawText(msg.c_str(), 0, 0, 10, BLACK);
 }
 
 void HumunObject::draw3D()

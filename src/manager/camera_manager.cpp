@@ -11,14 +11,14 @@ void CameraManager::UpdateCameraY()
 {
     if (IsKeyDown(KEY_SPACE))
     {
-        Camera &camera = Vault::getCamera();
+        Camera &camera = Vault::instance().camera;
         camera.position.y += 0.3f;
         camera.target.y += 0.3f;
     }
 
     if (IsKeyDown(KEY_LEFT_SHIFT))
     {
-        Camera &camera = Vault::getCamera();
+        Camera &camera = Vault::instance().camera;
         camera.position.y -= 0.3f;
         camera.target.y -= 0.3f;
     }
@@ -27,7 +27,7 @@ void CameraManager::UpdateCameraY()
 void CameraManager::UpdateCameraMouse()
 {
 
-    Camera *camera = &Vault::getCamera();
+    Camera *camera = &Vault::instance().camera;
     Vector2 mousePositionDelta = GetMouseDelta();
 
     bool moveInWorldPlane = true;

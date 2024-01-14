@@ -9,6 +9,8 @@
 class GoalObject : public BaseObject
 {
 private:
+    void push() override;
+
 public:
     Color color = PURPLE;
     Vector3 loc;
