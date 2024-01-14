@@ -10,7 +10,7 @@
 
 #include "service/mq_service.hpp"
 
-#include "scenario/base_senario.hpp"
+#include "scenario/base_scenario.hpp"
 
 class GoalScenario : public BaseScenario
 {

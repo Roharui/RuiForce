@@ -2,13 +2,13 @@
 
 #include <vector>
 
-#include "scenario/goal_senario.hpp"
+#include "scenario/goal_scenario.hpp"
 
 #include "manager/base_manager.hpp"
 #include "manager/camera_manager.hpp"
 #include "manager/humun_manager.hpp"
 
-#include "scenario/base_senario.hpp"
+#include "scenario/base_scenario.hpp"
 
 using namespace std;
 
@@ -28,7 +28,7 @@ private:
     static Engine *engine;
 
 public:
-    void initialize(BaseScenario* scenario);
+    void initialize(BaseScenario *scenario);
 
     void run();
 

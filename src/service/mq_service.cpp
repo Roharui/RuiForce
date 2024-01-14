@@ -10,8 +10,6 @@
 #include <rabbitmq-c/tcp_socket.h>
 #include <rabbitmq-c/framing.h>
 
-#include <iostream>
-
 #include <nlohmann/json.hpp>
 
 #include "config.hpp"
@@ -174,7 +172,7 @@ void MQService::sendMessage(const char *filename)
 
         json j = json::parse(stringify_bytes(message.body));
 
-        this->dataQueue.push_back((float)j["angle"]);
+        this->dataQueue.push_back(j);
 
         amqp_basic_ack(conn, 1, (unsigned)envelope.delivery_tag, 0);
 

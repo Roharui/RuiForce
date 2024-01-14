@@ -10,7 +10,7 @@
 #include "core/vault.hpp"
 #include "core/engine.hpp"
 
-#include "scenario/goal_senario.hpp"
+#include "scenario/goal_scenario.hpp"
 
 Driver::Driver()
 {

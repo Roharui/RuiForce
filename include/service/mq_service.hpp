@@ -7,6 +7,10 @@
 #include <rabbitmq-c/amqp.h>
 #include <rabbitmq-c/tcp_socket.h>
 
+#include <nlohmann/json.hpp>
+
+using json = nlohmann::json;
+
 class MQService
 {
 private:
@@ -14,7 +18,7 @@ private:
     amqp_socket_t *socket = NULL;
 
 public:
-    std::deque<float> dataQueue;
+    std::deque<json> dataQueue;
 
     MQService();
 

@@ -20,7 +20,7 @@
 #include "service/mq_service.hpp"
 #include "service/move_service.hpp"
 
-#include "scenario/goal_senario.hpp"
+#include "scenario/goal_scenario.hpp"
 
 using namespace std;
 
@@ -100,8 +100,10 @@ void GoalScenario::waitForResponse()
 {
     if (!this->mqService->dataQueue.empty())
     {
-        this->angle = this->mqService->dataQueue.at(0);
+        json j = this->mqService->dataQueue.at(0);
         this->mqService->dataQueue.pop_front();
+
+        this->angle = j["angle"];
         this->frame = 0;
         this->step++;
     }
@@ -160,14 +162,19 @@ void GoalScenario::mqProduceResult()
 
 void GoalScenario::initialize()
 {
-    this->humun = new HumunObject({0., HUMUN_SIZE_R, 0.}, 0., BLUE);
-    this->goal = new GoalObject({5., HUMUN_SIZE_R, 0.});
 }
 
 void GoalScenario::run()
 {
     if (IsKeyPressed(KEY_P))
     {
+        Vault::instance().object.clear();
+        Vault::instance().humun.clear();
+        Vault::instance().goal.clear();
+
+        this->humun = new HumunObject({0., HUMUN_SIZE_R, 0.}, 0., BLUE);
+        this->goal = new GoalObject({5., HUMUN_SIZE_R, 0.});
+
         delete this->mqService;
         this->step = 0;
         this->turn = DEFAULT_TURN;
