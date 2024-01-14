@@ -16,8 +16,6 @@ Driver::Driver()
 {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, GAME_TITLE);
 
-    DisableCursor();
-
     SetTargetFPS(FPS);
 
     Vault::instance();

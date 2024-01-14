@@ -7,6 +7,8 @@
 #include <raylib.h>
 #include <raymath.h>
 
+#include <nlohmann/json.hpp>
+
 #include "config.hpp"
 
 #include "core/vault.hpp"
@@ -79,7 +81,7 @@ void GoalScenario::capture()
 
     EndTextureMode();
 
-    this->fileName = std::format("{}\\{}.png", ExePath(), time(0));
+    this->fileName = format("{}\\{}.png", ExePath(), time(0));
 
     Image image = LoadImageFromTexture(target.texture);
     ImageFlipVertical(&image);
@@ -92,7 +94,14 @@ void GoalScenario::capture()
 
 void GoalScenario::mqProduceChoose()
 {
-    thread t(&MQService::sendMessage, this->mqService, this->fileName.c_str());
+    nlohmann::json mqBuffer;
+
+    mqBuffer["type"] = "request";
+    mqBuffer["filename"] = this->fileName.c_str();
+
+    this->json = mqBuffer.dump();
+
+    thread t(&MQService::sendMessage, this->mqService, this->json.c_str());
     t.detach();
 }
 
@@ -100,10 +109,11 @@ void GoalScenario::waitForResponse()
 {
     if (!this->mqService->dataQueue.empty())
     {
-        json j = this->mqService->dataQueue.at(0);
+        nlohmann::json mqBuffer = this->mqService->dataQueue.at(0);
         this->mqService->dataQueue.pop_front();
 
-        this->angle = j["angle"];
+        this->angle = mqBuffer["angle"].template get<float>();
+        this->uuid = mqBuffer["uuid"].template get<string>();
         this->frame = 0;
         this->step++;
     }
@@ -156,8 +166,27 @@ void GoalScenario::movePosition()
 
 void GoalScenario::mqProduceResult()
 {
-    thread t(&MQService::sendMessage, this->mqService, this->moveAmount.c_str());
+
+    nlohmann::json mqBuffer;
+
+    mqBuffer["type"] = "result";
+    mqBuffer["result"] = this->moveAmount;
+    mqBuffer["uuid"] = this->uuid;
+
+    this->json = mqBuffer.dump();
+
+    thread t(&MQService::sendMessage, this->mqService, this->json.c_str());
     t.detach();
+}
+
+void GoalScenario::waitForResponseDoNothing()
+{
+    if (!this->mqService->dataQueue.empty())
+    {
+        nlohmann::json mqBuffer = this->mqService->dataQueue.at(0);
+        this->mqService->dataQueue.pop_front();
+        this->step++;
+    }
 }
 
 void GoalScenario::initialize()
@@ -219,6 +248,10 @@ void GoalScenario::run()
             break;
 
         case 7:
+            this->waitForResponseDoNothing();
+            break;
+
+        case 8:
             this->turn--;
             this->step = 1;
             if (this->turn == 0 || this->inGoal)

@@ -26,18 +26,21 @@ void CameraManager::UpdateCameraY()
 
 void CameraManager::UpdateCameraMouse()
 {
-
     Camera *camera = &Vault::instance().camera;
-    Vector2 mousePositionDelta = GetMouseDelta();
 
     bool moveInWorldPlane = true;
     bool rotateAroundTarget = false;
     bool lockView = true;
     bool rotateUp = false;
 
-    // Mouse support
-    CameraYaw(camera, -mousePositionDelta.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotateAroundTarget);
-    CameraPitch(camera, -mousePositionDelta.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lockView, rotateAroundTarget, rotateUp);
+    if (IsMouseButtonDown(MOUSE_BUTTON_LEFT))
+    {
+        Vector2 mousePositionDelta = GetMouseDelta();
+
+        // Mouse support
+        CameraYaw(camera, -mousePositionDelta.x * CAMERA_MOUSE_MOVE_SENSITIVITY, rotateAroundTarget);
+        CameraPitch(camera, -mousePositionDelta.y * CAMERA_MOUSE_MOVE_SENSITIVITY, lockView, rotateAroundTarget, rotateUp);
+    }
 
     // Keyboard support
     if (IsKeyDown(KEY_W))

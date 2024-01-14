@@ -134,11 +134,14 @@ MQService::MQService()
     amqp_channel_open(conn, 1);
     die_on_amqp_error(amqp_get_rpc_reply(conn), "Opening channel");
 
-    amqp_exchange_declare(conn, 1, amqp_cstring_bytes(MQ_EXCHANGE), amqp_cstring_bytes("direct"), 0, 1, 1, 0, amqp_empty_table);
-    amqp_exchange_declare(conn, 1, amqp_cstring_bytes(MQ_REPLY), amqp_cstring_bytes("direct"), 0, 1, 1, 0, amqp_empty_table);
+    // amqp_exchange_declare(conn, 1, amqp_cstring_bytes(MQ_EXCHANGE), amqp_cstring_bytes("direct"), 0, 1, 0, 0, amqp_empty_table);
+    // amqp_exchange_declare(conn, 1, amqp_cstring_bytes(MQ_REPLY), amqp_cstring_bytes("direct"), 0, 1, 0, 0, amqp_empty_table);
 
-    amqp_queue_declare(conn, 1, amqp_cstring_bytes(MQ_QUEUE), 0, 1, 0, 1, amqp_empty_table);
-    amqp_queue_declare(conn, 1, amqp_cstring_bytes(MQ_REPLY), 0, 1, 0, 1, amqp_empty_table);
+    // amqp_queue_declare(conn, 1, amqp_cstring_bytes(MQ_QUEUE), 0, 1, 0, 0, amqp_empty_table);
+    // amqp_queue_declare(conn, 1, amqp_cstring_bytes(MQ_REPLY), 0, 1, 0, 0, amqp_empty_table);
+
+    amqp_queue_purge(conn, 1, amqp_cstring_bytes(MQ_QUEUE));
+    amqp_queue_purge(conn, 1, amqp_cstring_bytes(MQ_REPLY));
 
     amqp_queue_bind(conn, 1, amqp_cstring_bytes(MQ_QUEUE), amqp_cstring_bytes(MQ_EXCHANGE), amqp_cstring_bytes(MQ_ROUTING_KEY), amqp_empty_table);
     die_on_amqp_error(amqp_get_rpc_reply(conn), "Declaring exchange");

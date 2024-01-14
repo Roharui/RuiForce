@@ -12,6 +12,8 @@
 
 #include "scenario/base_scenario.hpp"
 
+using namespace std;
+
 class GoalScenario : public BaseScenario
 {
 private:
@@ -22,16 +24,18 @@ private:
     HumunObject *humun;
     GoalObject *goal;
 
-    std::string fileName;
+    string json;
+    string uuid;
+    string fileName;
 
-    std::thread *t;
+    thread *t;
 
     float angle = 0.;
     int frame = 0;
 
     float moveBefore = 0.;
     float moveAfter = 0.;
-    std::string moveAmount = "";
+    string moveAmount = "";
 
     bool inGoal = false;
 
@@ -44,6 +48,7 @@ private:
     void changeAngle();
     void movePosition();
     void mqProduceResult();
+    void waitForResponseDoNothing();
 
 public:
     void initialize() override;
