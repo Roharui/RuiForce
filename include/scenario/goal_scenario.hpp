@@ -25,7 +25,11 @@ private:
     GoalObject *goal;
 
     string json;
+
     string uuid;
+
+    string phase_id;
+
     string fileName;
 
     thread *t;

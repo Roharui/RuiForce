@@ -47,6 +47,8 @@ void GoalScenario::startTurn()
     this->moveBefore = 0.;
     this->moveAfter = 0.;
 
+    this->phase_id = "";
+
     this->inGoal = false;
 }
 
@@ -96,7 +98,12 @@ void GoalScenario::mqProduceChoose()
 {
     nlohmann::json mqBuffer;
 
+    if (this->phase_id.size() != 0)
+    {
+        mqBuffer["phase"] = this->phase_id;
+    }
     mqBuffer["type"] = "request";
+    mqBuffer["turn"] = this->turn - DEFAULT_TURN + 1;
     mqBuffer["filename"] = this->fileName.c_str();
 
     this->json = mqBuffer.dump();
@@ -112,8 +119,9 @@ void GoalScenario::waitForResponse()
         nlohmann::json mqBuffer = this->mqService->dataQueue.at(0);
         this->mqService->dataQueue.pop_front();
 
-        this->angle = mqBuffer["angle"].template get<float>();
+        this->phase_id = mqBuffer["phase"].template get<string>();
         this->uuid = mqBuffer["uuid"].template get<string>();
+        this->angle = mqBuffer["angle"].template get<float>();
         this->frame = 0;
         this->step++;
     }
@@ -170,8 +178,10 @@ void GoalScenario::mqProduceResult()
     nlohmann::json mqBuffer;
 
     mqBuffer["type"] = "result";
-    mqBuffer["result"] = this->moveAmount;
     mqBuffer["uuid"] = this->uuid;
+    mqBuffer["phase"] = this->phase_id;
+    mqBuffer["turn"] = this->turn;
+    mqBuffer["result"] = this->moveAmount;
 
     this->json = mqBuffer.dump();
 
