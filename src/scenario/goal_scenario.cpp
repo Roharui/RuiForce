@@ -103,7 +103,7 @@ void GoalScenario::mqProduceChoose()
         mqBuffer["phase"] = this->phase_id;
     }
     mqBuffer["type"] = "request";
-    mqBuffer["turn"] = this->turn - DEFAULT_TURN + 1;
+    mqBuffer["turn"] = DEFAULT_TURN - this->turn + 1;
     mqBuffer["filename"] = this->fileName.c_str();
 
     this->json = mqBuffer.dump();
@@ -266,6 +266,7 @@ void GoalScenario::run()
             this->step = 1;
             if (this->turn == 0 || this->inGoal)
             {
+                this->turn = DEFAULT_TURN;
                 this->step = 0;
                 this->phase--;
             }
