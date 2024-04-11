@@ -10,7 +10,8 @@
 #include "core/vault.hpp"
 #include "core/engine.hpp"
 
-#include "scenario/goal_scenario.hpp"
+#include "scenario/test_scenario.hpp"
+
 
 Driver::Driver()
 {
@@ -20,7 +21,7 @@ Driver::Driver()
 
     Vault::instance();
     Engine::instance();
-    Engine::instance().initialize(new GoalScenario());
+    Engine::instance().initialize(new TestScenario());
 }
 
 void Driver::Run()

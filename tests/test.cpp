@@ -4,8 +4,6 @@
 
 #include <iostream>
 
-#include <service/mq_service.hpp>
-
 TEST(Basic, GTest_test)
 {
     EXPECT_EQ(3, 3);

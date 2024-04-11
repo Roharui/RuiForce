@@ -2,8 +2,6 @@
 
 #include <vector>
 
-#include "scenario/goal_scenario.hpp"
-
 #include "manager/base_manager.hpp"
 #include "manager/camera_manager.hpp"
 #include "manager/humun_manager.hpp"
